@@ -1,0 +1,26 @@
+{
+  "success":true,
+  "message":"data recved",
+  "data": {
+    "characters": [
+      {
+        "name":"Spider man",
+        "url":"assets/images/spiderman.png",
+        "actor":"Tom Holland",
+        "description":"Spider-Man is a fictional superhero created by writer-editor Stan Lee and writer-artist Steve Ditko. He first appeared in the anthology comic book Amazing Fantasy #15 (August 1962) in the Silver Age of Comic Books."
+      },
+      {
+        "name":"Iron man",
+        "url":"assets/images/ironman.png",
+        "actor":"Robert Downey, Jr.",
+        "description":"Iron Man is a fictional superhero appearing in American comic books published by Marvel Comics. The character was co-created by writer and editor Stan Lee, developed by scripter Larry Lieber, and designed by artists Don Heck and Jack Kirby. "
+      },
+      {
+        "name":"Captain america",
+        "url":"assets/images/captonamerica.png",
+        "actor":"Christopher Robert Evans",
+        "description":"Captain America has agility, strength, speed, endurance, and reaction time superior to any Olympic athlete who ever competed. The Super-Soldier formula that he has metabolized has enhanced all of his bodily functions to the peak of human efficiency."
+      }
+    ]
+  }
+}
