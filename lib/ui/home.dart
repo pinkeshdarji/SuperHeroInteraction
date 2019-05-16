@@ -1,8 +1,12 @@
 import 'dart:async' show Future;
 import 'dart:convert';
+import 'dart:math' as math;
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:super_hero_interaction/models/apiresponse.dart';
 import 'package:super_hero_interaction/models/character.dart';
@@ -21,10 +25,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   int currentIndex;
   AnimationController controller;
+  AnimationController scaleController;
   CurvedAnimation curvedAnimation;
   Animation<Offset> _translationAnim;
   Animation<Offset> _moveAnim;
   Animation<double> _scaleAnim;
+  Animation<double> _rotationAnim;
 
   @override
   void initState() {
@@ -40,19 +46,29 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     currentIndex = 0;
     controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 1000),
+      duration: Duration(milliseconds: 700),
     );
+
+//    scaleController = AnimationController(
+//      vsync: this,
+//      duration: Duration(milliseconds: 300),
+//    );
+
     curvedAnimation =
         CurvedAnimation(parent: controller, curve: Curves.easeOut);
 
-    _translationAnim = Tween(begin: Offset(0.0, 0.0), end: Offset(-1000.0, 0.0))
+    _translationAnim = Tween(begin: Offset(0.0, 0.0), end: Offset(-100.0, 0.0))
         .animate(controller)
           ..addListener(() {
             setState(() {});
           });
+    _rotationAnim = Tween(begin: 0.0, end: 2.0).animate(controller)
+      ..addListener(() {
+        setState(() {});
+      });
 
-    _scaleAnim = Tween(begin: 0.965, end: 1.0).animate(curvedAnimation);
-    _moveAnim = Tween(begin: Offset(0.0, -0.05), end: Offset(0.0, 0.0))
+    _scaleAnim = Tween(begin: 0.9, end: 1.0).animate(curvedAnimation);
+    _moveAnim = Tween(begin: Offset(0.0, -0.06), end: Offset(0.0, 0.0))
         .animate(curvedAnimation);
   }
 
@@ -116,16 +132,22 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         child: Transform.translate(
                           offset: _getFlickTransformOffset(
                               characters.indexOf(character)),
-                          child: FractionalTranslation(
-                            translation: _getStackedCardOffset(
+                          child: Transform.rotate(
+                            angle: _getFlickRotateOffset(
                                 characters.indexOf(character)),
-                            child: Transform.scale(
-                              scale: _getStackedCardScale(
+                            origin:
+                                Offset(0, MediaQuery.of(context).size.height),
+                            child: FractionalTranslation(
+                              translation: _getStackedCardOffset(
                                   characters.indexOf(character)),
-                              child: Align(
-                                alignment: AlignmentDirectional.bottomCenter,
-                                child: HeroCard(
-                                  character: character,
+                              child: Transform.scale(
+                                scale: _getStackedCardScale(
+                                    characters.indexOf(character)),
+                                child: Align(
+                                  alignment: AlignmentDirectional.bottomCenter,
+                                  child: HeroCard(
+                                    character: character,
+                                  ),
                                 ),
                               ),
                             ),
@@ -149,7 +171,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       return _moveAnim.value;
     } else if (diff > 0 && diff <= 2) {
       print('move 0.5');
-      return Offset(0.0, -0.05 * diff);
+      return Offset(0.0, -0.06 * diff);
     } else {
       print('move 0');
       return Offset(0.0, 0.0);
@@ -163,7 +185,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     } else if (cardIndex == currentIndex + 1) {
       return _scaleAnim.value;
     } else {
-      return (1 - (0.035 * diff.abs()));
+      return (1 - (0.123 * diff.abs()));
     }
   }
 
@@ -174,9 +196,21 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     return Offset(0.0, 0.0);
   }
 
+  double _getFlickRotateOffset(int cardIndex) {
+    if (cardIndex == currentIndex) {
+      return -math.pi / 2 * _rotationAnim.value;
+    }
+    return 0.0;
+  }
+
   void _horizontalDragEnd(DragEndDetails details) {
     if (details.primaryVelocity < 0) {
       // Swiped Right to Left
+//      scaleController.forward().whenComplete(() {
+//        setState(() {
+//          scaleController.reset();
+//        });
+//      });
       controller.forward().whenComplete(() {
         setState(() {
           controller.reset();
