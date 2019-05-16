@@ -8,7 +8,7 @@ import 'package:super_hero_interaction/models/apiresponse.dart';
 import 'package:super_hero_interaction/models/character.dart';
 import 'package:super_hero_interaction/utilities/settings.dart';
 
-import 'tourist_card.dart';
+import 'hero_card.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -19,14 +19,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   Future<Apiresponse> apiresponse;
   List<Character> characters;
 
-  var cards = [
-    TouristCard(index: 0, imageUrl: "image1.jpeg"),
-    TouristCard(index: 1, imageUrl: "image2.jpeg"),
-    TouristCard(index: 2, imageUrl: "image3.jpeg"),
-    TouristCard(index: 3, imageUrl: "image4.jpeg"),
-    TouristCard(index: 4, imageUrl: "image1.jpeg"),
-    TouristCard(index: 5, imageUrl: "image2.jpeg")
-  ];
   int currentIndex;
   AnimationController controller;
   CurvedAnimation curvedAnimation;
@@ -48,7 +40,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     currentIndex = 0;
     controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 3000),
+      duration: Duration(milliseconds: 1000),
     );
     curvedAnimation =
         CurvedAnimation(parent: controller, curve: Curves.easeOut);
@@ -116,17 +108,26 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               ? Stack(
                   alignment: AlignmentDirectional.bottomCenter,
                   overflow: Overflow.visible,
-                  children: cards.reversed.map((card) {
-                    if (cards.indexOf(card) <= 2) {
+                  children: snapshot.data.data.characters.reversed
+                      .map((Character character) {
+                    if (characters.indexOf(character) <= 2) {
                       return GestureDetector(
                         onHorizontalDragEnd: _horizontalDragEnd,
                         child: Transform.translate(
-                          offset: _getFlickTransformOffset(card),
+                          offset: _getFlickTransformOffset(
+                              characters.indexOf(character)),
                           child: FractionalTranslation(
-                            translation: _getStackedCardOffset(card),
+                            translation: _getStackedCardOffset(
+                                characters.indexOf(character)),
                             child: Transform.scale(
-                              scale: _getStackedCardScale(card),
-                              child: card,
+                              scale: _getStackedCardScale(
+                                  characters.indexOf(character)),
+                              child: Align(
+                                alignment: AlignmentDirectional.bottomCenter,
+                                child: HeroCard(
+                                  character: character,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -141,9 +142,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
   }
 
-  Offset _getStackedCardOffset(TouristCard card) {
-    int diff = card.index - currentIndex;
-    if (card.index == currentIndex + 1) {
+  Offset _getStackedCardOffset(int cardIndex) {
+    int diff = cardIndex - currentIndex;
+    if (cardIndex == currentIndex + 1) {
       print('animation');
       return _moveAnim.value;
     } else if (diff > 0 && diff <= 2) {
@@ -155,19 +156,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     }
   }
 
-  double _getStackedCardScale(TouristCard card) {
-    int diff = card.index - currentIndex;
-    if (card.index == currentIndex) {
+  double _getStackedCardScale(int cardIndex) {
+    int diff = cardIndex - currentIndex;
+    if (cardIndex == currentIndex) {
       return 1.0;
-    } else if (card.index == currentIndex + 1) {
+    } else if (cardIndex == currentIndex + 1) {
       return _scaleAnim.value;
     } else {
       return (1 - (0.035 * diff.abs()));
     }
   }
 
-  Offset _getFlickTransformOffset(TouristCard card) {
-    if (card.index == currentIndex) {
+  Offset _getFlickTransformOffset(int cardIndex) {
+    if (cardIndex == currentIndex) {
       return _translationAnim.value;
     }
     return Offset(0.0, 0.0);
@@ -179,9 +180,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       controller.forward().whenComplete(() {
         setState(() {
           controller.reset();
-          TouristCard removedCard = cards.removeAt(0);
-          cards.add(removedCard);
-          currentIndex = cards[0].index;
+//          TouristCard removedCard = cards.removeAt(0);
+//          cards.add(removedCard);
+//          currentIndex = cards[0].index;
+
+          Character character = characters.removeAt(0);
+          characters.add(character);
+          //cards.add(removedCard);
+          //currentIndex = cards[0].index;
         });
       });
     }
