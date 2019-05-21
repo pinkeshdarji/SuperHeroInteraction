@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'ui/home.dart';
+import 'package:super_hero_interaction/ui/home.dart';
 
 void main() => runApp(MyApp());
 

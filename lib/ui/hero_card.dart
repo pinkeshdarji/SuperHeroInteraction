@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:super_hero_interaction/models/character.dart';
 
+import 'hero_detail.dart';
+
 class HeroCard extends StatelessWidget {
   final Character character;
   final double characterScaleFactor;
@@ -40,10 +42,13 @@ class HeroCard extends StatelessWidget {
             children: <Widget>[
               Transform.scale(
                 scale: characterScaleFactor,
-                child: Image.asset(
-                  character.url,
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  width: MediaQuery.of(context).size.width,
+                child: Hero(
+                  tag: character.url,
+                  child: Image.asset(
+                    character.url,
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    width: MediaQuery.of(context).size.width,
+                  ),
                 ),
               ),
               Padding(
@@ -70,18 +75,29 @@ class HeroCard extends StatelessWidget {
                       height: 20,
                       width: 100,
                     ),
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          "Know more ",
-                          style: textKnowMore,
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          size: 15,
-                          color: Colors.amber,
-                        )
-                      ],
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HeroDetail(
+                                    character: character,
+                                  )),
+                        );
+                      },
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            "Know more ",
+                            style: textKnowMore,
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            size: 15,
+                            color: Colors.amber,
+                          )
+                        ],
+                      ),
                     ),
                   ],
                 ),
