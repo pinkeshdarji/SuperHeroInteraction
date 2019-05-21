@@ -27,8 +27,11 @@ class HeroCard extends StatelessWidget {
           decoration: BoxDecoration(
               color: ccColor,
               borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(35.0),
-                  topRight: Radius.circular(35.0),)),
+                topLeft: Radius.circular(35.0),
+                topRight: Radius.circular(35.0),
+//                bottomLeft: Radius.circular(35.0 * border),
+//                bottomRight: Radius.circular(35.0 * border),
+              )),
         ),
         Positioned(
           top: -150,
