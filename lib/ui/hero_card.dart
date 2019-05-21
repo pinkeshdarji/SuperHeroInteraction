@@ -4,8 +4,9 @@ import 'package:super_hero_interaction/utilities/hex_color.dart';
 
 class HeroCard extends StatelessWidget {
   final Character character;
+  final double characterScaleFactor;
 
-  HeroCard({this.character});
+  HeroCard({this.character, this.characterScaleFactor});
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +33,13 @@ class HeroCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Image.asset(
-                character.url,
-                height: MediaQuery.of(context).size.width * 0.8,
-                width: MediaQuery.of(context).size.width,
+              Transform.scale(
+                scale: characterScaleFactor,
+                child: Image.asset(
+                  character.url,
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  width: MediaQuery.of(context).size.width,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40.0),

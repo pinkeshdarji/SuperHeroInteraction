@@ -30,6 +30,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   Animation<Offset> _translationAnim;
   Animation<Offset> _moveAnim;
   Animation<double> _scaleAnim;
+  Animation<double> _scaleCharacterAnim;
   Animation<double> _rotationAnim;
 
   @override
@@ -46,7 +47,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     currentIndex = 0;
     controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 700),
+      duration: Duration(milliseconds: 500),
     );
 
 //    scaleController = AnimationController(
@@ -68,6 +69,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       });
 
     _scaleAnim = Tween(begin: 0.9, end: 1.0).animate(curvedAnimation);
+    _scaleCharacterAnim = Tween(begin: 0.2, end: 1.0).animate(curvedAnimation);
     _moveAnim = Tween(begin: Offset(0.0, -0.06), end: Offset(0.0, 0.0))
         .animate(curvedAnimation);
   }
@@ -146,6 +148,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 child: Align(
                                   alignment: AlignmentDirectional.bottomCenter,
                                   child: HeroCard(
+                                    characterScaleFactor: _getCharacterScale(
+                                        characters.indexOf(character)),
                                     character: character,
                                   ),
                                 ),
@@ -186,6 +190,16 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       return _scaleAnim.value;
     } else {
       return (1 - (0.123 * diff.abs()));
+    }
+  }
+
+  double _getCharacterScale(int cardIndex) {
+    if (cardIndex == currentIndex) {
+      return 1.0;
+    } else if (cardIndex == currentIndex + 1) {
+      return _scaleCharacterAnim.value;
+    } else {
+      return 0.2;
     }
   }
 
