@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:super_hero_interaction/models/character.dart';
-import 'package:super_hero_interaction/utilities/hex_color.dart';
 
 class HeroCard extends StatelessWidget {
   final Character character;
   final double characterScaleFactor;
+  final Color ccColor;
+  final double border;
 
-  HeroCard({this.character, this.characterScaleFactor});
+  HeroCard(
+      {this.character, this.characterScaleFactor, this.ccColor, this.border});
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +25,10 @@ class HeroCard extends StatelessWidget {
           height: MediaQuery.of(context).size.height * 0.6,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-              color: HexColor(character.background),
+              color: ccColor,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(35.0),
-                  topRight: Radius.circular(35.0))),
+                  topRight: Radius.circular(35.0),)),
         ),
         Positioned(
           top: -150,

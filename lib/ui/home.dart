@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:super_hero_interaction/models/apiresponse.dart';
 import 'package:super_hero_interaction/models/character.dart';
+import 'package:super_hero_interaction/utilities/hex_color.dart';
 import 'package:super_hero_interaction/utilities/settings.dart';
 
 import 'hero_card.dart';
@@ -31,7 +32,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   Animation<Offset> _moveAnim;
   Animation<double> _scaleAnim;
   Animation<double> _scaleCharacterAnim;
+  Animation<double> _borderCharacterAnim;
   Animation<double> _rotationAnim;
+  Animation<Color> _characterColorTween;
 
   @override
   void initState() {
@@ -50,11 +53,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       duration: Duration(milliseconds: 500),
     );
 
-//    scaleController = AnimationController(
-//      vsync: this,
-//      duration: Duration(milliseconds: 300),
-//    );
-
     curvedAnimation =
         CurvedAnimation(parent: controller, curve: Curves.easeOut);
 
@@ -70,6 +68,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
     _scaleAnim = Tween(begin: 0.9, end: 1.0).animate(curvedAnimation);
     _scaleCharacterAnim = Tween(begin: 0.2, end: 1.0).animate(curvedAnimation);
+    _borderCharacterAnim = Tween(begin: 1.0, end: 0.0).animate(curvedAnimation);
     _moveAnim = Tween(begin: Offset(0.0, -0.06), end: Offset(0.0, 0.0))
         .animate(curvedAnimation);
   }
@@ -148,6 +147,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 child: Align(
                                   alignment: AlignmentDirectional.bottomCenter,
                                   child: HeroCard(
+                                    border: _getCharacterBorder(
+                                        characters.indexOf(character)),
+                                    ccColor: _getCharacterColor(
+                                        characters.indexOf(character)),
                                     characterScaleFactor: _getCharacterScale(
                                         characters.indexOf(character)),
                                     character: character,
@@ -203,6 +206,32 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     }
   }
 
+  Color _getCharacterColor(int cardIndex) {
+    String colorString =
+        "0xff${characters.elementAt(cardIndex).background}".replaceAll("#", "");
+    int colorInt = int.parse(colorString);
+    _characterColorTween =
+        ColorTween(begin: Colors.grey[200], end: Color(colorInt))
+            .animate(curvedAnimation);
+    if (cardIndex == currentIndex) {
+      return HexColor(characters.elementAt(cardIndex).background);
+    } else if (cardIndex == currentIndex + 1) {
+      return _characterColorTween.value;
+    } else {
+      return Colors.grey[200];
+    }
+  }
+
+  double _getCharacterBorder(int cardIndex) {
+    if (cardIndex == currentIndex) {
+      return 0.0;
+    } else if (cardIndex == currentIndex + 1) {
+      return _borderCharacterAnim.value;
+    } else {
+      return 35.0;
+    }
+  }
+
   Offset _getFlickTransformOffset(int cardIndex) {
     if (cardIndex == currentIndex) {
       return _translationAnim.value;
@@ -220,22 +249,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   void _horizontalDragEnd(DragEndDetails details) {
     if (details.primaryVelocity < 0) {
       // Swiped Right to Left
-//      scaleController.forward().whenComplete(() {
-//        setState(() {
-//          scaleController.reset();
-//        });
-//      });
       controller.forward().whenComplete(() {
         setState(() {
           controller.reset();
-//          TouristCard removedCard = cards.removeAt(0);
-//          cards.add(removedCard);
-//          currentIndex = cards[0].index;
-
           Character character = characters.removeAt(0);
           characters.add(character);
-          //cards.add(removedCard);
-          //currentIndex = cards[0].index;
         });
       });
     }
