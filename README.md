@@ -1,6 +1,8 @@
 # super_hero_interaction
 
-A new Flutter project.
+Super Hero Interaction developed in Flutter, design inspired from [here](https://dribbble.com/shots/5935613-Marvel-Movies-Interaction)
+
+<img src="./preview/preview.gif" height="600" alt="Screenshot"/>
 
 ## Getting Started
 
