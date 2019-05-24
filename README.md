@@ -4,9 +4,10 @@ Super Hero Interaction developed in Flutter, design inspired from [here](https:/
 
 <img src="./preview/preview.gif" height="600" alt="Screenshot"/>
 
-## Getting Started
+## Credits
+- Super hero character images source from [pngimg.com](http://pngimg.com/license)
 
-This project is a starting point for a Flutter application.
+## Getting Started
 
 A few resources to get you started if this is your first Flutter project:
 
