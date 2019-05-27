@@ -10,7 +10,7 @@ Super Hero Interaction developed in Flutter, design inspired from [here](https:/
 
 ### If you :heart: the effort then star :star: it.
 
-<img src="./preview/preview.gif" height="600" alt="Screenshot"/>
+<img src="./preview/preview.gif" alt="Screenshot"/>
 
 ## Credits
 - Super hero character images source from [pngimg.com](http://pngimg.com/license)
